@@ -1,0 +1,17 @@
+name: Upstream
+
+# Once a week, the Tests workflow with tiny_bvh.h from tinybvh's latest main instead of the
+# pinned 1.8.0 commit: an early warning that upstream changes would need porting.
+on:
+  schedule:
+    - cron: '17 5 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    uses: ./.github/workflows/tests.yml
+    with:
+      tinybvh-commit: main

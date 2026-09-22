@@ -5,6 +5,13 @@ on:
     branches: [ main ]
   pull_request:
   workflow_dispatch:
+  # upstream.yml calls this with tinybvh's main instead of the pinned commit.
+  workflow_call:
+    inputs:
+      tinybvh-commit:
+        description: The tinybvh commit whose tiny_bvh.h refdump is built against
+        type: string
+        default: 0e4584287823252cf83f0e9cd072848bec5f79c5
 
 permissions:
   contents: read
@@ -26,7 +33,7 @@ jobs:
             os: macos-latest
             cxx: clang++
     env:
-      TINYBVH_COMMIT: 0e4584287823252cf83f0e9cd072848bec5f79c5
+      TINYBVH_COMMIT: ${{ inputs.tinybvh-commit || '0e4584287823252cf83f0e9cd072848bec5f79c5' }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-dotnet@v6

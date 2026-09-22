@@ -103,7 +103,8 @@ Neither the scenes nor the dumps are part of this repository. To set them up in 
    This takes seconds and writes about 64 MB. GCC and Clang work too, as long as they don't fuse
    multiply-adds, which would change results in the last bits: build with
    `g++ -O2 -std=c++20 -ffp-contract=off refdump.cpp -o refdump`, or the same with `clang++`.
-   CI runs these steps with MSVC on Windows, GCC on Linux and Clang on macOS (arm64).
+   CI runs these steps with MSVC on Windows, GCC on Linux and Clang on macOS (arm64), and once a
+   week against tinybvh's latest `main` as an early warning of upstream changes.
 
 Then run the tests:
 
