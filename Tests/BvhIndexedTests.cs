@@ -39,20 +39,16 @@ namespace MicroBVH.Tests
 
 		/// <summary>
 		/// Loads the indexed sections of a scene's reference dump. Ignores the test when the dump is
-		/// missing or predates them.
+		/// missing.
 		/// </summary>
 		static IndexedScene LoadScene( string sceneName )
 		{
 			string refPath = BvhSceneFile.TestDataPath( sceneName + ".ref" );
 			if ( !File.Exists( refPath ) )
 			{
-				Assert.Ignore( $"missing {refPath}; run TestData/fetch.ps1 and Tools/RefDump/run_all.bat" );
+				Assert.Ignore( $"missing {refPath}; see the README for how to generate the reference dumps" );
 			}
 			RefDumpFile refFile = RefDumpFile.Load( refPath );
-			if ( refFile.WeldedVertices == null || refFile.WeldedVertices.Length == 0 )
-			{
-				Assert.Ignore( $"{refPath} predates the indexed-geometry sections; re-run Tools/RefDump/run_all.bat" );
-			}
 
 			IndexedScene scene = new IndexedScene();
 			scene.Ref = refFile;

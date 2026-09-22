@@ -3,7 +3,7 @@
 	<!--
 		Reference tests: compare the library against dumps produced by the original C++ tinybvh.
 		Run with "dotnet test Tests -c Release"; the reference scenes and dumps are looked up in
-		the MICROBVH_TESTDATA directory, or in ../tinybvh-unity/TestData next to this repository.
+		the MICROBVH_TESTDATA directory, or in TestData at the root of this repository.
 	-->
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>

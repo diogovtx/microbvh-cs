@@ -8,8 +8,8 @@ namespace MicroBVH.Tests
 	/// <summary>
 	/// Loader for tinybvh's ".bin" test scenes (int32 triCount followed by triCount * 3 float4
 	/// vertices) and the location of the reference data. The data directory is MICROBVH_TESTDATA
-	/// when set; otherwise TestData in the tinybvh-unity repository next to this one, which is
-	/// where TestData/fetch.ps1 and Tools/RefDump/run_all.bat put the scenes and the dumps.
+	/// when set; otherwise the TestData folder at the root of this repository, where the README's
+	/// instructions put the scenes and the reference dumps.
 	/// </summary>
 	public static class BvhSceneFile
 	{
@@ -63,11 +63,11 @@ namespace MicroBVH.Tests
 			// find the repository root, recognized by MicroBVH.csproj: above this source file when the
 			// tests run from a local build, otherwise above the test binaries.
 			DirectoryInfo dir = FindRepositoryRoot( Path.GetDirectoryName( sourcePath ) ) ?? FindRepositoryRoot( TestContext.CurrentContext.TestDirectory );
-			if ( dir == null || dir.Parent == null )
+			if ( dir == null )
 			{
 				return Path.Combine( TestContext.CurrentContext.TestDirectory, "TestData" );
 			}
-			return Path.Combine( dir.Parent.FullName, "tinybvh-unity", "TestData" );
+			return Path.Combine( dir.FullName, "TestData" );
 		}
 
 		private static DirectoryInfo FindRepositoryRoot( string start )

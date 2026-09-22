@@ -7,7 +7,7 @@ namespace MicroBVH.Tests
 	/// <summary>
 	/// Data-driven tests comparing the C# port against reference data dumped by Tools/RefDump/refdump.cpp
 	/// from the original tinybvh library. If TestData/&lt;name&gt;.bin or .ref is missing, the test is ignored
-	/// with a pointer to TestData/fetch.ps1 and Tools/RefDump/run_all.bat.
+	/// with a pointer to the README.
 	/// </summary>
 	public class BvhReferenceTests
 	{
@@ -82,7 +82,7 @@ namespace MicroBVH.Tests
 		{
 			if ( !TryGetPaths( sceneName, out string binPath, out string refPath ) )
 			{
-				Assert.Ignore( $"missing {binPath} or {refPath}; run TestData/fetch.ps1 to fetch scenes and Tools/RefDump/run_all.bat to generate reference data" );
+				Assert.Ignore( $"missing {binPath} or {refPath}; see the README for how to get the scenes and generate the reference dumps" );
 			}
 
 			BvhVec4[] verts = BvhSceneFile.Load( binPath, out uint triCount );
@@ -120,7 +120,7 @@ namespace MicroBVH.Tests
 		{
 			if ( !TryGetPaths( sceneName, out string binPath, out string refPath ) )
 			{
-				Assert.Ignore( $"missing {binPath} or {refPath}; run TestData/fetch.ps1 and Tools/RefDump/run_all.bat" );
+				Assert.Ignore( $"missing {binPath} or {refPath}; see the README for how to get the scenes and generate the reference dumps" );
 			}
 
 			BvhVec4[] verts = BvhSceneFile.Load( binPath, out uint triCount );
@@ -192,7 +192,7 @@ namespace MicroBVH.Tests
 		{
 			if ( !TryGetPaths( sceneName, out string binPath, out string refPath ) )
 			{
-				Assert.Ignore( $"missing {binPath} or {refPath}; run TestData/fetch.ps1 and Tools/RefDump/run_all.bat" );
+				Assert.Ignore( $"missing {binPath} or {refPath}; see the README for how to get the scenes and generate the reference dumps" );
 			}
 
 			BvhVec4[] verts = BvhSceneFile.Load( binPath, out uint triCount );
@@ -234,7 +234,7 @@ namespace MicroBVH.Tests
 		{
 			if ( !TryGetPaths( sceneName, out string binPath, out string refPath ) )
 			{
-				Assert.Ignore( $"missing {binPath} or {refPath}; run TestData/fetch.ps1 and Tools/RefDump/run_all.bat" );
+				Assert.Ignore( $"missing {binPath} or {refPath}; see the README for how to get the scenes and generate the reference dumps" );
 			}
 
 			BvhVec4[] verts = BvhSceneFile.Load( binPath, out uint triCount );
@@ -323,7 +323,7 @@ namespace MicroBVH.Tests
 		{
 			if ( !TryGetPaths( sceneName, out string binPath, out string refPath ) )
 			{
-				Assert.Ignore( $"missing {binPath} or {refPath}; run TestData/fetch.ps1 and Tools/RefDump/run_all.bat" );
+				Assert.Ignore( $"missing {binPath} or {refPath}; see the README for how to get the scenes and generate the reference dumps" );
 			}
 
 			BvhVec4[] verts = BvhSceneFile.Load( binPath, out uint triCount );

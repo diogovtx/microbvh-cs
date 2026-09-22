@@ -76,14 +76,40 @@ tinybvh's `suzanne`, `bunny` and `cryteksponza` scenes: node arrays and primitiv
 bit, and 65,536 rays per scene through `Intersect`, `IsOccluded`, `Refit`, indexed meshes and a
 TLAS. They also cover custom geometry and threaded builds.
 
+Neither the scenes nor the dumps are part of this repository. To set them up in `TestData/`:
+
+1. Get the scenes, which are tinybvh's own: run `TestData/fetch.ps1`, or save
+   [suzanne.bin](https://raw.githubusercontent.com/jbikker/tinybvh/0e4584287823252cf83f0e9cd072848bec5f79c5/testdata/suzanne.bin),
+   [bunny.bin](https://raw.githubusercontent.com/jbikker/tinybvh/0e4584287823252cf83f0e9cd072848bec5f79c5/testdata/bunny.bin) and
+   [cryteksponza.bin](https://raw.githubusercontent.com/jbikker/tinybvh/0e4584287823252cf83f0e9cd072848bec5f79c5/testdata/cryteksponza.bin)
+   into `TestData/` yourself.
+2. Generate the dumps with `Tools/RefDump/refdump.cpp`, which runs tinybvh itself over each scene
+   and needs
+   [tiny_bvh.h](https://raw.githubusercontent.com/jbikker/tinybvh/0e4584287823252cf83f0e9cd072848bec5f79c5/tiny_bvh.h)
+   from the same tinybvh commit next to it. With MSVC, from a Developer Command Prompt in the
+   repository root:
+
+   ```
+   cd Tools\RefDump
+   curl -O https://raw.githubusercontent.com/jbikker/tinybvh/0e4584287823252cf83f0e9cd072848bec5f79c5/tiny_bvh.h
+   cl /O2 /EHsc /std:c++20 /fp:precise refdump.cpp
+   .\refdump ..\..\TestData\suzanne.bin ..\..\TestData\suzanne.ref
+   .\refdump ..\..\TestData\bunny.bin ..\..\TestData\bunny.ref
+   .\refdump ..\..\TestData\cryteksponza.bin ..\..\TestData\cryteksponza.ref
+   ```
+
+   This takes seconds and writes about 64 MB. Other compilers should work as long as they don't
+   fuse multiply-adds, which changes results in the last bits: with GCC or Clang, build with
+   `-O2 -std=c++20 -ffp-contract=off`. Only MSVC has been tested.
+
+Then run the tests:
+
 ```
 dotnet test Tests -c Release
 ```
 
-The scenes and dumps come from the tinybvh-unity repository: run its `TestData/fetch.ps1`, then
-build and run `Tools/RefDump`. The tests look for them in `../tinybvh-unity/TestData`, or in the
-directory named by `MICROBVH_TESTDATA`, and skip themselves when the data is missing. Add
-`-p:MicroBvhCheckOverflow=true` to test the library built with overflow checking.
+Tests whose data is missing skip themselves. Set `MICROBVH_TESTDATA` to read the data from another
+directory, and add `-p:MicroBvhCheckOverflow=true` to test the library built with overflow checking.
 
 `MicroBVH.csproj` builds the file against its portability floor: .NET Standard 2.1, C# 9, unsafe
 code disabled, warnings as errors.

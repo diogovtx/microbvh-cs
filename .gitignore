@@ -4,3 +4,8 @@ obj/
 .vscode/
 *.user
 TestResults/
+TestData/*.bin
+TestData/*.ref
+Tools/RefDump/tiny_bvh.h
+Tools/RefDump/*.exe
+Tools/RefDump/*.obj

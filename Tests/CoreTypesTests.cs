@@ -50,7 +50,7 @@ namespace MicroBVH.Tests
 			string binPath = BvhSceneFile.TestDataPath( "suzanne.bin" );
 			if ( !File.Exists( binPath ) )
 			{
-				Assert.Ignore( $"missing {binPath}; set MICROBVH_TESTDATA or run tinybvh-unity's TestData/fetch.ps1" );
+				Assert.Ignore( $"missing {binPath}; run TestData/fetch.ps1 for the scenes" );
 			}
 			BvhVec4[] verts = BvhSceneFile.Load( binPath, out uint triCount );
 			Assert.Greater( triCount, 0u );
