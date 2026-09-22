@@ -100,9 +100,10 @@ Neither the scenes nor the dumps are part of this repository. To set them up in 
    .\refdump ..\..\TestData\cryteksponza.bin ..\..\TestData\cryteksponza.ref
    ```
 
-   This takes seconds and writes about 64 MB. Other compilers should work as long as they don't
-   fuse multiply-adds, which changes results in the last bits: with GCC or Clang, build with
-   `-O2 -std=c++20 -ffp-contract=off`. Only MSVC has been tested.
+   This takes seconds and writes about 64 MB. GCC and Clang work too, as long as they don't fuse
+   multiply-adds, which would change results in the last bits: build with
+   `g++ -O2 -std=c++20 -ffp-contract=off refdump.cpp -o refdump`, or the same with `clang++`.
+   CI runs these steps with MSVC on Windows, GCC on Linux and Clang on macOS (arm64).
 
 Then run the tests:
 
