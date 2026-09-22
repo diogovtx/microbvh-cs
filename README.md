@@ -24,7 +24,9 @@ bounding volume hierarchy construction and ray traversal in about 2,100 lines of
 
 Not included: the SBVH and the other alternative builders, the tree optimizer, the wide CPU and
 GPU layouts, SIMD traversal, double precision, voxel sets, opacity micromaps, ray packets, sphere
-queries and saving trees to disk. tinybvh has all of those.
+queries and saving trees to disk. tinybvh has all of those, and
+[com.diogovtx.tinybvh](https://github.com/diogovtx/com.diogovtx.tinybvh) ports all of them to
+C# for Unity 6, with Burst and SIMD.
 
 ## Usage
 
