@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<!--
+		Builds the single-file library against its portability floor: .NET Standard 2.1 and C# 9,
+		with unsafe code disabled. Projects can reference this, or simply copy MicroBVH.cs.
+	-->
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<LangVersion>9.0</LangVersion>
+		<Nullable>disable</Nullable>
+		<AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+		<RootNamespace>MicroBVH</RootNamespace>
+		<AssemblyName>MicroBVH</AssemblyName>
+		<!-- "-p:MicroBvhCheckOverflow=true" builds the library with overflow checking, to verify
+		     that it also works in projects that enable it; the tests stay unchecked. -->
+		<CheckForOverflowUnderflow Condition="'$(MicroBvhCheckOverflow)' == 'true'">true</CheckForOverflowUnderflow>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="MicroBVH.cs" />
+	</ItemGroup>
+
+</Project>
