@@ -1,5 +1,7 @@
 # microBVH
 
+[![Tests](https://github.com/diogovtx/microbvh-cs/actions/workflows/tests.yml/badge.svg)](https://github.com/diogovtx/microbvh-cs/actions/workflows/tests.yml)
+
 A small, portable, single-file C# subset of [tinybvh](https://github.com/jbikker/tinybvh) 1.8.0:
 bounding volume hierarchy construction and ray traversal in about 2,100 lines of safe C#.
 

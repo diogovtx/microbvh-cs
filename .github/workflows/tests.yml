@@ -1,0 +1,84 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows (MSVC)
+            os: windows-latest
+          - name: Linux (GCC)
+            os: ubuntu-latest
+            cxx: g++
+          - name: macOS (Clang, arm64)
+            os: macos-latest
+            cxx: clang++
+    env:
+      TINYBVH_COMMIT: 0e4584287823252cf83f0e9cd072848bec5f79c5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+
+      # The README's steps: fetch the scenes, build refdump against tinybvh, generate the dumps.
+      - name: Fetch the scenes
+        shell: pwsh
+        run: ./TestData/fetch.ps1
+
+      - name: Fetch tiny_bvh.h
+        shell: pwsh
+        run: Invoke-WebRequest "https://raw.githubusercontent.com/jbikker/tinybvh/$env:TINYBVH_COMMIT/tiny_bvh.h" -OutFile Tools/RefDump/tiny_bvh.h
+
+      - name: Build refdump with MSVC
+        if: runner.os == 'Windows'
+        shell: pwsh
+        working-directory: Tools/RefDump
+        run: |
+          $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
+          & "$vs\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64 -HostArch amd64 -SkipAutomaticLocation
+          cl /nologo /O2 /EHsc /std:c++20 /fp:precise refdump.cpp
+
+      - name: Build refdump with ${{ matrix.cxx }}
+        if: runner.os != 'Windows'
+        working-directory: Tools/RefDump
+        run: ${{ matrix.cxx }} -O2 -std=c++20 -ffp-contract=off refdump.cpp -o refdump
+
+      - name: Generate the reference dumps
+        shell: pwsh
+        working-directory: Tools/RefDump
+        run: |
+          foreach ( $scene in 'suzanne', 'bunny', 'cryteksponza' )
+          {
+            ./refdump ../../TestData/$scene.bin ../../TestData/$scene.ref
+            if ( $LASTEXITCODE -ne 0 ) { exit $LASTEXITCODE }
+          }
+
+      # The reference tests skip themselves when their data is missing; here that is a failure.
+      - name: Test
+        shell: pwsh
+        run: |
+          $log = dotnet test Tests -c Release --artifacts-path "$env:RUNNER_TEMP/build"
+          $log
+          if ( $LASTEXITCODE -ne 0 ) { exit $LASTEXITCODE }
+          if ( -not ( $log -match 'Skipped:\s*0,' ) ) { Write-Error 'some tests were skipped'; exit 1 }
+
+      - name: Test with overflow checking
+        shell: pwsh
+        run: |
+          $log = dotnet test Tests -c Release -p:MicroBvhCheckOverflow=true --artifacts-path "$env:RUNNER_TEMP/build-checked"
+          $log
+          if ( $LASTEXITCODE -ne 0 ) { exit $LASTEXITCODE }
+          if ( -not ( $log -match 'Skipped:\s*0,' ) ) { Write-Error 'some tests were skipped'; exit 1 }
