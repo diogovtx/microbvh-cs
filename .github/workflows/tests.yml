@@ -89,3 +89,7 @@ jobs:
           $log
           if ( $LASTEXITCODE -ne 0 ) { exit $LASTEXITCODE }
           if ( -not ( $log -match 'Skipped:\s*0,' ) ) { Write-Error 'some tests were skipped'; exit 1 }
+
+      # Only built, so it keeps compiling; timings on shared CI machines would mean little.
+      - name: Build the benchmark
+        run: dotnet build Benchmarks -c Release --artifacts-path "${{ runner.temp }}/build-bench"

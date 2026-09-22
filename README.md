@@ -73,6 +73,20 @@ spheres.CustomIntersect = ( ref Ray r, uint i ) => IntersectSphere( ref r, i ); 
 spheres.CustomIsOccluded = ( in Ray r, uint i ) => SphereBlocks( r, i );
 ```
 
+## Performance
+
+Measured with `Benchmarks/` on an AMD Ryzen 9 5950X (16 cores, 32 threads) under .NET 10, with
+2^20 rays per scene that start outside the scene and aim at random points inside it:
+
+| Scene | Triangles | Build | Threaded build | Intersect, Mrays/s (1 / 32 threads) | IsOccluded, Mrays/s (1 / 32 threads) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| suzanne | 15,488 | 18 ms | - | 1.6 / 27 | 2.1 / 36 |
+| bunny | 69,630 | 85 ms | 33 ms | 1.4 / 25 | 1.7 / 31 |
+| cryteksponza | 262,267 | 321 ms | 107 ms | 1.4 / 26 | 2.8 / 48 |
+
+Threaded builds start at 50,000 triangles. `dotnet run -c Release --project Benchmarks`
+reproduces the table, reading the scenes from `TestData/` like the tests.
+
 ## Tests
 
 `Tests/` holds NUnit tests that compare microBVH with reference dumps of the C++ library on
